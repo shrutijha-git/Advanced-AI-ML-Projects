@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>SpamShield AI | Spam Detection</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <main class="container">
+
+        <header class="header">
+            <div class="logo">🛡️</div>
+            <div>
+                <h1>SpamShield AI</h1>
+                <p>Intelligent Message Spam Detection</p>
+            </div>
+        </header>
+
+        <section class="card">
+            <h2>Analyze a Message</h2>
+
+            <p class="description">
+                Paste a message below to check whether
+                our machine learning model identifies it
+                as spam or legitimate.
+            </p>
+
+            <form id="prediction-form">
+                <label for="message">Your message</label>
+
+                <textarea
+                    id="message"
+                    placeholder="Type or paste a message here..."
+                    maxlength="5000"
+                    required
+                ></textarea>
+
+                <div class="form-footer">
+                    <span id="char-count">0 / 5000</span>
+                    <button type="submit" id="analyze-btn">
+                        Analyze Message
+                    </button>
+                </div>
+            </form>
+
+            <div id="result" class="result hidden"
+                 role="status" aria-live="polite">
+                <h3 id="result-title"></h3>
+                <p id="result-description"></p>
+
+                <div class="meter">
+                    <div id="probability-bar"></div>
+                </div>
+
+                <p id="probability-text"></p>
+            </div>
+
+            <p id="error" class="error hidden"
+               role="alert"></p>
+        </section>
+
+        <footer>
+            Powered by Flask, Scikit-learn and NLP
+            <br>
+            Educational demo — predictions are not guaranteed.
+        </footer>
+
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

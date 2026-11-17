@@ -1,0 +1,23 @@
+
+# Python virtual environment
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Private environment variables
+.env
+.env.*
+!.env.example
+
+# Downloaded datasets
+01-Spam-Detection-Web-App/data/*.csv
+01-Spam-Detection-Web-App/data/SMSSpamCollection
+
+# Generated ML models
+*.joblib
+
+# VS Code
+.vscode/
