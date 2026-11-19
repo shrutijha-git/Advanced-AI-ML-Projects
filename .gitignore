@@ -1,23 +1,67 @@
 
+# ==========================================
+# Advanced AI/ML Projects - Git Ignore
+# ==========================================
+
 # Python virtual environment
 .venv/
+venv/
+env/
 
 # Python cache
 __pycache__/
 *.pyc
+*.pyo
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
 # Private environment variables
 .env
 .env.*
 !.env.example
 
-# Downloaded datasets
+# ------------------------------------------
+# Advanced Project 1 - SpamShield AI
+# ------------------------------------------
+
+# Downloaded spam datasets
 01-Spam-Detection-Web-App/data/*.csv
 01-Spam-Detection-Web-App/data/SMSSpamCollection
 
-# Generated ML models
+# Generated machine learning models
 *.joblib
 
-# VS Code
+# ------------------------------------------
+# Advanced Project 2 - DocuMind AI
+# ------------------------------------------
+
+# Uploaded PDF documents and local datasets
+02-AI-PDF-Chatbot/data/
+02-AI-PDF-Chatbot/uploads/
+02-AI-PDF-Chatbot/*.pdf
+
+# Locally downloaded model directories
+02-AI-PDF-Chatbot/models/
+02-AI-PDF-Chatbot/cache/
+
+# Local vector databases and FAISS indexes
+*.faiss
+*.index
+
+# Streamlit private settings
+.streamlit/secrets.toml
+**/.streamlit/secrets.toml
+
+# ------------------------------------------
+# Editor and operating system files
+# ------------------------------------------
+
 .vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.log
+*.tmp
