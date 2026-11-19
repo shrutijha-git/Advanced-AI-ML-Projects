@@ -1,14 +1,14 @@
 
 # ==========================================
-# Advanced AI/ML Projects - Git Ignore
+# Advanced AI/ML Projects
 # ==========================================
 
-# Python virtual environment
+# Python virtual environments
 .venv/
 venv/
 env/
 
-# Python cache
+# Python caches
 __pycache__/
 *.pyc
 *.pyo
@@ -25,7 +25,6 @@ __pycache__/
 # Advanced Project 1 - SpamShield AI
 # ------------------------------------------
 
-# Downloaded spam datasets
 01-Spam-Detection-Web-App/data/*.csv
 01-Spam-Detection-Web-App/data/SMSSpamCollection
 
@@ -36,25 +35,41 @@ __pycache__/
 # Advanced Project 2 - DocuMind AI
 # ------------------------------------------
 
-# Uploaded PDF documents and local datasets
 02-AI-PDF-Chatbot/data/
 02-AI-PDF-Chatbot/uploads/
 02-AI-PDF-Chatbot/*.pdf
-
-# Locally downloaded model directories
 02-AI-PDF-Chatbot/models/
 02-AI-PDF-Chatbot/cache/
 
-# Local vector databases and FAISS indexes
 *.faiss
 *.index
 
-# Streamlit private settings
+# ------------------------------------------
+# Advanced Project 3 - InsightFlow Analytics
+# ------------------------------------------
+
+# Original downloaded dataset
+03-InsightFlow-Analytics/data/*.xlsx
+03-InsightFlow-Analytics/data/*.xls
+03-InsightFlow-Analytics/data/*.zip
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Keep the generated cleaned CSV for deployment
+!03-InsightFlow-Analytics/data/retail_sample.csv
+
+# ------------------------------------------
+# Streamlit
+# ------------------------------------------
+
 .streamlit/secrets.toml
 **/.streamlit/secrets.toml
 
 # ------------------------------------------
-# Editor and operating system files
+# Editors and operating system
 # ------------------------------------------
 
 .vscode/
