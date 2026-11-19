@@ -1,44 +1,34 @@
 
+import torch
 from sentence_transformers import SentenceTransformer
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
-import torch
 
 from utils.vector_store import PDFVectorStore
 
 
 class PDFRAGPipeline:
-    def __init__(self):
-        print("Loading embedding model...")
+    def __init__(self, embedding_model, tokenizer, generator):
+        # Shared, read-only AI models
+        self.embedding_model = embedding_model
+        self.tokenizer = tokenizer
+        self.generator = generator
 
-        self.embedding_model = SentenceTransformer(
-            "sentence-transformers/all-MiniLM-L6-v2",
-            device="cpu",
-        )
-
-        print("Loading answer generation model...")
-
-        model_name = "google/flan-t5-small"
-
-        self.tokenizer = AutoTokenizer.from_pretrained(
-            model_name
-        )
-
-        self.generator = AutoModelForSeq2SeqLM.from_pretrained(
-            model_name
-        )
-
-        self.generator.eval()
-
-        self.vector_store = PDFVectorStore(
-            self.embedding_model
-        )
+        # A separate vector store for each pipeline instance
+        self.vector_store = PDFVectorStore(embedding_model)
 
     def index_documents(self, chunks):
         self.vector_store.build_index(chunks)
 
     def ask(self, question):
+        if not question or not question.strip():
+            return {
+                "answer": "Please enter a question.",
+                "sources": [],
+            }
+
         results = self.vector_store.search(
-            question, top_k=3
+            question.strip(),
+            top_k=3,
         )
 
         if not results:
@@ -47,18 +37,19 @@ class PDFRAGPipeline:
                 "sources": [],
             }
 
+        # Keep the context short enough for FLAN-T5-small.
         context = "\n\n".join(
             f"[{item['source']}, page {item['page']}] "
-            f"{item['text']}"
+            f"{item['text'][:500]}"
             for item in results
         )
 
         prompt = (
-            "Answer the question using only the context below. "
-            "If the context does not contain the answer, "
-            "say 'I could not find the answer in the PDF.'\n\n"
+            "Answer using only the context. "
+            "If the answer is not in the context, say "
+            "'I could not find the answer in the PDF.'\n\n"
             f"Context:\n{context}\n\n"
-            f"Question: {question}\n"
+            f"Question: {question.strip()}\n"
             "Answer:"
         )
 
@@ -69,7 +60,7 @@ class PDFRAGPipeline:
             truncation=True,
         )
 
-        with torch.no_grad():
+        with torch.inference_mode():
             outputs = self.generator.generate(
                 **inputs,
                 max_new_tokens=120,
@@ -86,3 +77,21 @@ class PDFRAGPipeline:
             "answer": answer or "No answer generated.",
             "sources": results,
         }
+
+
+def load_models():
+    """Load reusable AI models without storing document data."""
+    embedding_model = SentenceTransformer(
+        "sentence-transformers/all-MiniLM-L6-v2",
+        device="cpu",
+    )
+
+    model_name = "google/flan-t5-small"
+
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    generator = AutoModelForSeq2SeqLM.from_pretrained(model_name)
+
+    generator.to("cpu")
+    generator.eval()
+
+    return embedding_model, tokenizer, generator
